@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tfserving-configs
+data:
+  MODEL_NAME: stable-diffusion
+  MODEL_PATH: gs://tf-serving-exploration-bucket/stable_diffusion_model
+
