@@ -35,14 +35,16 @@ spec:
         args:
         - "--model_name=$(MODEL_NAME)"
         - "--model_base_path=$(MODEL_PATH)"
-        - "--rest_api_timeout_in_ms=100000"
+        - "--rest_api_timeout_in_ms=240000"
         envFrom:
         - configMapRef:
             name: tfserving-configs
         imagePullPolicy: IfNotPresent
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: "/v1/models/stable-diffusion"
             port: 8501
+            scheme: HTTP
           initialDelaySeconds: 30
           periodSeconds: 15
           failureThreshold: 10
@@ -56,6 +58,6 @@ spec:
         resources:
           requests:
             cpu: "3"
-            memory: 10Gi
+            memory: "12Gi"
 
 

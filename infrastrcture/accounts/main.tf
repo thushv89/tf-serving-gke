@@ -16,7 +16,7 @@ provider "google" {
   region  = local.data["gcp_region"]
 }
 
-resource "google_service_account" "sa" {
+resource "google_service_account" "sa_gke_admin" {
   account_id   = "gke-admin"
   display_name = "GKE Service Account (Admin)"
 }
@@ -27,7 +27,7 @@ resource "google_project_iam_binding" "binding_sa_gke_admin" {
   role    = "roles/container.admin"
 
   members = [
-    "serviceAccount:${google_service_account.sa.email}",
+    "serviceAccount:${google_service_account.sa_gke_admin.email}",
   ]
 }
 
@@ -37,7 +37,7 @@ resource "google_project_iam_binding" "binding_sa_compute_viewer" {
   role    = "roles/compute.viewer"
 
   members = [
-    "serviceAccount:${google_service_account.sa.email}",
+    "serviceAccount:${google_service_account.sa_gke_admin.email}",
   ]
 }
 
@@ -47,17 +47,32 @@ resource "google_project_iam_binding" "binding_sa_user" {
   role    = "roles/iam.serviceAccountUser"
 
   members = [
-    "serviceAccount:${google_service_account.sa.email}",
+    "serviceAccount:${google_service_account.sa_gke_admin.email}",
   ]
 }
 
 
 # Bind user to impersonate the service account when needed
 resource "google_service_account_iam_binding" "admin_account_iam" {
-  service_account_id = google_service_account.sa.name
+  service_account_id = google_service_account.sa_gke_admin.name
   role               = "roles/iam.serviceAccountTokenCreator"
 
   members = [
     "user:${local.data["gcp_user"]}",
+  ]
+}
+
+# This service account will be used by gke nodes
+resource "google_service_account" "sa_gke_node" {
+  account_id   = "gke-node"
+  display_name = "GKE Node Service Account"
+}
+
+resource "google_project_iam_binding" "binding_node_sa" {
+  project = local.data["gcp_project_id"]
+  role    = "roles/container.nodeServiceAccount"
+
+  members = [
+    "serviceAccount:${google_service_account.sa_gke_node.email}",
   ]
 }
