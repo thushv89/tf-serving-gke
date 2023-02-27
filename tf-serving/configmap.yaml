@@ -5,4 +5,5 @@ metadata:
 data:
   MODEL_NAME: stable-diffusion
   MODEL_PATH: gs://tf-serving-exploration-bucket/stable_diffusion_model
+  BATCHING_PARAMETERS_FILE: gs://tf-serving-exploration-bucket/batching_parameters
 
