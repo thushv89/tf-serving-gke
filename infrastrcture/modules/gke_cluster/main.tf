@@ -1,11 +1,10 @@
-locals {
-  data = jsondecode(file("../.gcp_config/basic_config.json"))
-}
-
-provider "google" {
-  project      = local.data["gcp_project_id"]
-  region       = local.data["gcp_region"]
-  access_token = file("../.gcp_config/credentials")
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "3.5.0"
+    }
+  }
 }
 
 # To avoid Error: googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '300.0' and is short '50.0'. project has a quota of '250.0' with '250.0' available. View and manage quotas at https://console.cloud.google.com/iam-admin/quotas?usage=USED&project=tf-serving-exploration., forbidden
