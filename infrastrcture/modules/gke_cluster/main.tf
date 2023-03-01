@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-# To avoid Error: googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '300.0' and is short '50.0'. project has a quota of '250.0' with '250.0' available. View and manage quotas at https://console.cloud.google.com/iam-admin/quotas?usage=USED&project=tf-serving-exploration., forbidden
+# To avoid Error: googleapi: Error 403: Insufficient regional quota to satisfy request: resource "SSD_TOTAL_GB": request requires '300.0' and is short '50.0'. project has a quota of '250.0' with '250.0' available. View and manage quotas at ..., forbidden
 # set the location to a zone than a region
 resource "google_container_cluster" "primary" {
   name     = var.cluster_name
