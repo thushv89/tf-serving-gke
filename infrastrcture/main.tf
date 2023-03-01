@@ -20,6 +20,12 @@ provider "google" {
   ]
 }
 
+resource "time_sleep" "wait_60_seconds" {
+  depends_on = [module.iam]
+
+  create_duration = "60s"
+}
+
 data "google_service_account_access_token" "default" {
  provider               	= google.impersonation_helper
  target_service_account 	= module.iam.service_account_gke_admin
@@ -27,7 +33,7 @@ data "google_service_account_access_token" "default" {
  # This depends_on is required, otherwise this may get executed
  # before adding the role ServiceAccountUser, leading to
  # googleapi: Error 403: terraform Permission 'iam.serviceAccounts.getAccessToken' denied on resource
- depends_on = [module.iam]
+ depends_on = [time_sleep.wait_60_seconds]
 }
 
 provider "google" {
